@@ -10,5 +10,5 @@ public interface IRepository<TEntity>
     public Task<TEntity> Update(TEntity entity);
     public Task<TEntity> Remove(TEntity entity);
     public Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>>? predicate = null);
-    public Task<PaginatedListModel<TEntity>> GetPaginated<TField>(int pageIndex, int pageSize, string? searchTerm = null);
+    public Task<PaginatedListModel<TEntity>> GetPaginated<TField>(int pageIndex, int pageSize, Expression<Func<TEntity, bool>>? predicate = null);
 }
