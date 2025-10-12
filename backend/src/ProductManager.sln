@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Api", "Produ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Domain", "ProductManager.Domain\ProductManager.Domain.csproj", "{8A5D1DFF-020B-4C4F-AF91-5C8BE5A5BA3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Persistence.SqlServer", "ProductManager.Persistence.SqlServer\ProductManager.Persistence.SqlServer.csproj", "{42DF444A-6725-46AE-A7CF-A0FDC9ECE46A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A5D1DFF-020B-4C4F-AF91-5C8BE5A5BA3E} = {8A5D1DFF-020B-4C4F-AF91-5C8BE5A5BA3E}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +26,10 @@ Global
 		{8A5D1DFF-020B-4C4F-AF91-5C8BE5A5BA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A5D1DFF-020B-4C4F-AF91-5C8BE5A5BA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A5D1DFF-020B-4C4F-AF91-5C8BE5A5BA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42DF444A-6725-46AE-A7CF-A0FDC9ECE46A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42DF444A-6725-46AE-A7CF-A0FDC9ECE46A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42DF444A-6725-46AE-A7CF-A0FDC9ECE46A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42DF444A-6725-46AE-A7CF-A0FDC9ECE46A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
