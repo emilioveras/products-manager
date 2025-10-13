@@ -35,7 +35,9 @@ public class Repository<TEntity> : IRepository<TEntity>
 
     public Task<PaginatedListModel<TEntity>> GetPaginated<TField>(int pageIndex, int pageSize, Expression<Func<TEntity, bool>>? predicate = null)
     {
-        var items = _dbSet.Value.AsQueryable().Where(predicate).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+        var items = predicate == null ?
+            _dbSet.Value.AsQueryable().Skip((pageIndex - 1) * pageSize).Take(pageSize) :
+            _dbSet.Value.AsQueryable().Where(predicate).Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
         var totalCount = items.CountAsync();
 

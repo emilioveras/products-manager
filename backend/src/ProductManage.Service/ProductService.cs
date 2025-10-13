@@ -1,9 +1,9 @@
 ﻿using ProductManager.Domain.Contracts;
 using ProductManager.Domain.Models;
 
-namespace ProductManage.Service;
+namespace ProductManager.Service;
 
-public class ProductService : IService
+public class ProductService : IServiceProduct
 {
     private readonly IRepository<ProductModel> _repository;
 
@@ -12,12 +12,12 @@ public class ProductService : IService
         _repository = repository;
     }
 
-    public Task<ProductModel> Add(ProductModel entity)
+    public Task Add(ProductModel entity)
     {
         return _repository.Add(entity);
     }
 
-    public Task<ProductModel> FirstOrDefault(string searchFilter)
+    public Task FirstOrDefault(string searchFilter)
     {
         return _repository.FirstOrDefault(e =>
             e.Name.Contains(searchFilter) ||
@@ -26,21 +26,23 @@ public class ProductService : IService
             e.Stock.ToString().Contains(searchFilter));
     }
 
-    public Task<PaginatedListModel<ProductModel>> GetPaginated<TField>(int pageIndex, int pageSize, string searchFilter)
+    public Task<PaginatedListModel<ProductModel>> GetPaginated(int pageIndex, int pageSize, string searchFilter)
     {
-        return _repository.GetPaginated<TField>(pageIndex, pageSize, e =>
+        return string.IsNullOrWhiteSpace(searchFilter) ?
+            _repository.GetPaginated<ProductModel>(pageIndex, pageSize) :
+            _repository.GetPaginated<ProductModel>(pageIndex, pageSize, e =>
             e.Name.Contains(searchFilter) ||
             e.Category.Contains(searchFilter) ||
             e.Price.ToString().Contains(searchFilter) ||
             e.Stock.ToString().Contains(searchFilter));
     }
 
-    public Task<ProductModel> Remove(ProductModel entity)
+    public Task Remove(ProductModel entity)
     {
         return _repository.Remove(entity);
     }
 
-    public Task<ProductModel> Update(ProductModel entity)
+    public Task Update(ProductModel entity)
     {
         return _repository.Update(entity);
     }
