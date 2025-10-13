@@ -1,0 +1,6 @@
+services:
+  productmanager.api:
+    image: ${DOCKER_REGISTRY-}productmanagerapi
+    build:
+      context: .
+      dockerfile: ProductManager.Api/Dockerfile
