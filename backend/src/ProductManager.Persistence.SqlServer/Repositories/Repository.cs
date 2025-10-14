@@ -36,12 +36,16 @@ public class Repository<TEntity> : IRepository<TEntity>
     public Task<PaginatedListModel<TEntity>> GetPaginated<TField>(int pageIndex, int pageSize, Expression<Func<TEntity, bool>>? predicate = null)
     {
         var items = predicate == null ?
-            _dbSet.Value.AsQueryable().Skip((pageIndex - 1) * pageSize).Take(pageSize) :
-            _dbSet.Value.AsQueryable().Where(predicate).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            _dbSet.Value.AsQueryable().Skip(pageIndex * pageSize).Take(pageSize) :
+            _dbSet.Value.AsQueryable().Where(predicate).Skip(pageIndex * pageSize).Take(pageSize);
 
-        var totalCount = items.CountAsync();
+        var totalCount = items.Count();
 
-        return Task.FromResult(new PaginatedListModel<TEntity>(items, pageIndex, pageSize, totalCount.Result));
+        var result = items.ToList();
+
+        var paginated = new PaginatedListModel<TEntity>(result, pageIndex, pageSize, totalCount);
+
+        return Task.FromResult(paginated);
     }
 
     public Task<TEntity> Remove(TEntity entity)

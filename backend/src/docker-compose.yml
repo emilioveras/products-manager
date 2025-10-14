@@ -1,6 +1,23 @@
 services:
   productmanager.api:
+    container_name: productmanagerapi
     image: ${DOCKER_REGISTRY-}productmanagerapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTION_STRING=Server=sqlserver,1433;User=sa;Password=P455w0rd;TrustServerCertificate=True;
+    ports:
+      - "5000:8080"
+      - "5001:8081"
     build:
       context: .
       dockerfile: ProductManager.Api/Dockerfile
+    depends_on:
+      - sqlserver
+  sqlserver:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      MSSQL_SA_PASSWORD: "P455w0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"

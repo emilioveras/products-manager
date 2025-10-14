@@ -28,13 +28,17 @@ public class ProductService : IServiceProduct
 
     public Task<PaginatedListModel<ProductModel>> GetPaginated(int pageIndex, int pageSize, string searchFilter)
     {
-        return string.IsNullOrWhiteSpace(searchFilter) ?
-            _repository.GetPaginated<ProductModel>(pageIndex, pageSize) :
-            _repository.GetPaginated<ProductModel>(pageIndex, pageSize, e =>
-            e.Name.Contains(searchFilter) ||
-            e.Category.Contains(searchFilter) ||
-            e.Price.ToString().Contains(searchFilter) ||
-            e.Stock.ToString().Contains(searchFilter));
+        var resutls = _repository.GetPaginated<ProductModel>(pageIndex, pageSize);
+
+        return resutls;
+
+        //return string.IsNullOrWhiteSpace(searchFilter) ?
+        //    _repository.GetPaginated<ProductModel>(pageIndex, pageSize) :
+        //    _repository.GetPaginated<ProductModel>(pageIndex, pageSize, e =>
+        //    e.Name.Contains(searchFilter) ||
+        //    e.Category.Contains(searchFilter) ||
+        //    e.Price.ToString().Contains(searchFilter) ||
+        //    e.Stock.ToString().Contains(searchFilter));
     }
 
     public Task Remove(ProductModel entity)
