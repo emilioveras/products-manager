@@ -2,9 +2,10 @@ using ProductManager.Persistence.SqlServer.Contexts;
 using ProductManager.Persistence.SqlServer.Repositories;
 using ProductManager.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer;
 using ProductManager.Domain.Contracts;
 using ProductManager.Service;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 internal class Program
 {
@@ -13,6 +14,12 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
+        
+        //.AddNewtonsoftJson(options =>
+        //{
+        //    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        //    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+        //}); ;
 
         builder.Services.AddDbContext<DataBaseContext>(e =>
 

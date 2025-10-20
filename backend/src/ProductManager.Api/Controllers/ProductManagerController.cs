@@ -9,20 +9,16 @@ namespace ProductManager.Controllers;
 [Route("api/v{version:ApiVersion}/product-manager")]
 public class ProductManagerController : ControllerBase
 {
-    private readonly ILogger<ProductManagerController> _logger;
     private readonly IServiceProduct _service;
 
-    public ProductManagerController(ILogger<ProductManagerController> logger, IServiceProduct service)
+    public ProductManagerController(IServiceProduct service)
     {
-        _logger = logger;
         _service = service;
     }
 
     [HttpGet()]
     public async Task<IActionResult> Get([FromQuery] string? searchFilter, [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 10)
     {
-        var resutls = _service.GetPaginated(pageIndex, pageSize, searchFilter ?? string.Empty);
-
-        return this.Ok(resutls.Result);
+        return this.Ok(await _service.GetPaginated(pageIndex, pageSize, searchFilter ?? string.Empty));
     }
 }

@@ -13,7 +13,7 @@ public class PaginatedListModel<TEntity> : List<TEntity>
         Items = items;
         PageIndex = pageIndex;
         PageSize = pageSize;
-        TotalPages = (TotalPages - TotalPages % PageSize) / PageSize;
+        TotalPages = (totalCount - totalCount % PageSize) / PageSize;
         TotalCount = totalCount;
     }
 }

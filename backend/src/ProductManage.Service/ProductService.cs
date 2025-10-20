@@ -1,5 +1,6 @@
 ﻿using ProductManager.Domain.Contracts;
 using ProductManager.Domain.Models;
+using AutoMapper;
 
 namespace ProductManager.Service;
 
@@ -26,11 +27,11 @@ public class ProductService : IServiceProduct
             e.Stock.ToString().Contains(searchFilter));
     }
 
-    public Task<PaginatedListModel<ProductModel>> GetPaginated(int pageIndex, int pageSize, string searchFilter)
+    public async Task<PaginatedListModel<ProductModel>> GetPaginated(int pageIndex, int pageSize, string searchFilter)
     {
-        var resutls = _repository.GetPaginated<ProductModel>(pageIndex, pageSize);
+        var resutls = await _repository.GetPaginated<ProductModel>(pageIndex, pageSize);
 
-        return resutls;
+        return new PaginatedListModel<ProductModel>(resutls.Items, resutls.PageIndex, resutls.PageSize, resutls.TotalCount);
 
         //return string.IsNullOrWhiteSpace(searchFilter) ?
         //    _repository.GetPaginated<ProductModel>(pageIndex, pageSize) :
