@@ -40,21 +40,26 @@ public class Repository<TEntity> : IRepository<TEntity>
             _dbSet.Value.AsQueryable().Where(predicate).Skip(pageIndex * pageSize).Take(pageSize);
 
         var totalCount = items.Count();
-
         var result = items.ToList();
 
-        var paginated = new PaginatedListModel<TEntity>(result, pageIndex, pageSize, totalCount);
-
-        return Task.FromResult(paginated);
+        return Task.FromResult(new PaginatedListModel<TEntity>(result, pageIndex, pageSize, totalCount));
     }
 
-    public Task<TEntity> Remove(TEntity entity)
+    public async Task<TEntity> Remove(TEntity entity, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(_dataBaseContext.Remove(entity).Entity);
+        var removed = this._dbSet.Value.Remove(entity);
+
+        await this._dataBaseContext.SaveChangesAsync(cancellationToken);
+
+        return removed.Entity;
     }
 
-    public Task<TEntity> Update(TEntity entity)
+    public async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(_dataBaseContext.Update(entity).Entity);
+        var updated = this._dbSet.Value.Update(entity);
+
+        await this._dataBaseContext.SaveChangesAsync(cancellationToken);
+
+        return updated.Entity;
     }
 }

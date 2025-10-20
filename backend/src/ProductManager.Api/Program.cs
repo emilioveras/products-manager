@@ -4,8 +4,7 @@ using ProductManager.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using ProductManager.Domain.Contracts;
 using ProductManager.Service;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
 
 internal class Program
 {
@@ -13,28 +12,25 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
-        
-        //.AddNewtonsoftJson(options =>
-        //{
-        //    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        //    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-        //}); ;
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            });
 
         builder.Services.AddDbContext<DataBaseContext>(e =>
+            e.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING"))
+                .UseSeeding(static (context, _) =>
+                {
+                    context.Set<ProductModel>().AddRange(
+                        new ProductModel { Name = "Laptop", Category = "Electronics", Price = 999.99m, Stock = 50 },
+                        new ProductModel { Name = "Smartphone", Category = "Electronics", Price = 699.99m, Stock = 150 },
+                        new ProductModel { Name = "Desk Chair", Category = "Furniture", Price = 89.99m, Stock = 200 },
+                        new ProductModel { Name = "Book: C# Programming", Category = "Books", Price = 39.99m, Stock = 300 }
+                    );
 
-        e.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING"))
-            .UseSeeding(static (context, _) =>
-            {
-                context.Set<ProductModel>().AddRange(
-                    new ProductModel { Name = "Laptop", Category = "Electronics", Price = 999.99m, Stock = 50 },
-                    new ProductModel { Name = "Smartphone", Category = "Electronics", Price = 699.99m, Stock = 150 },
-                    new ProductModel { Name = "Desk Chair", Category = "Furniture", Price = 89.99m, Stock = 200 },
-                    new ProductModel { Name = "Book: C# Programming", Category = "Books", Price = 39.99m, Stock = 300 }
-                );
-
-                context.SaveChanges();
-            }));
+                    context.SaveChanges();
+                }));
 
         builder.Services.AddApiVersioning(options =>
         {
@@ -43,7 +39,7 @@ internal class Program
             options.ReportApiVersions = true;
         });
 
-        builder.Services.AddScoped<IServiceProduct, ProductService>();
+        builder.Services.AddScoped<IService, Service>();
         builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         var app = builder.Build();
@@ -65,7 +61,6 @@ internal class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
 
         app.Run();
     }
